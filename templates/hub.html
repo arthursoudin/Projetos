@@ -1,0 +1,45 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+    <meta charset="UTF-8">
+    <title>Hub de Relatórios</title>
+    <link rel="stylesheet" href="{{ url_for('static', filename='style.css') }}">
+</head>
+<body>
+    <div class="container">
+        <div class="header">
+            <div>
+                <h1>Hub de Relatórios</h1>
+                <p>Selecione qual sistema ou relatório você deseja acessar.</p>
+            </div>
+        </div>
+
+        <div class="form-container">
+            <div class="hub-grid">
+                
+                <!-- Botão 1: Relatório de Avaria -->
+                <a href="/relatorio-avaria" class="hub-card">
+                    <div class="hub-icon">📄</div>
+                    <h3>Relatório de Avaria</h3>
+                    <p>Gerar PDF de avaria ou falta Doce Mineiro.</p>
+                </a>
+
+                <!-- Botão 2: Exemplo de um futuro relatório -->
+                <div class="hub-card disabled">
+                    <div class="hub-icon">📊</div>
+                    <h3>Controle de Frota</h3>
+                    <p>Em desenvolvimento...</p>
+                </div>
+                
+                <!-- Botão 3: Outro exemplo -->
+                <div class="hub-card disabled">
+                    <div class="hub-icon">📦</div>
+                    <h3>Estoque</h3>
+                    <p>Em desenvolvimento...</p>
+                </div>
+
+            </div>
+        </div>
+    </div>
+</body>
+</html>

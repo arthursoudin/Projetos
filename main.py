@@ -8,11 +8,13 @@ from relatorio import gerar_relatorio
 # 1. ESTA LINHA É OBRIGATÓRIA E DEVE FICAR AQUI:
 app = Flask(__name__)
 
-
-# 2. As rotas vêm sempre DEPOIS da criação do 'app'
 @app.route("/")
-def inicio():
-    return render_template("index.html")
+def hub():
+    return render_template("hub.html")
+
+@app.route("/relatorio-avaria")
+def relatorio_avaria():
+    return render_template("avaria.html") 
 
 @app.route("/gerar-relatorio", methods=["POST"])
 def gerar():
