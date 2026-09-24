@@ -1,20 +1,55 @@
-from flask import Flask, render_template, request, send_file
+from flask import Flask, render_template, request, send_file, redirect, url_for, flash, jsonify
 from datetime import date
 
-# Importando o dicionário e a função geradora de outros arquivos
-from produtos import produtos_cadastrados
+from produtos import produtos_cadastrados, atualizar_produtos_via_excel
 from relatorio import gerar_relatorio
 
-# 1. ESTA LINHA É OBRIGATÓRIA E DEVE FICAR AQUI:
 app = Flask(__name__)
+# Chave secreta necessária para enviar mensagens (flash) do Python para o HTML
+app.secret_key = "chave_super_secreta_avaria" 
 
+# --- ROTAS DE PÁGINAS ---
 @app.route("/")
 def hub():
     return render_template("hub.html")
 
 @app.route("/relatorio-avaria")
 def relatorio_avaria():
-    return render_template("avaria.html") 
+    return render_template("avaria.html")
+
+
+# --- NOVAS ROTAS (SISTEMA V2.5) ---
+
+# 1. Rota para receber o arquivo Excel do Hub
+@app.route("/upload-produtos", methods=["POST"])
+def upload_produtos():
+    if 'arquivo_excel' not in request.files:
+        flash("Nenhum arquivo enviado.", "erro")
+        return redirect(url_for('hub'))
+    
+    arquivo = request.files['arquivo_excel']
+    if arquivo.filename == '':
+        flash("Nenhum arquivo selecionado.", "erro")
+        return redirect(url_for('hub'))
+        
+    if not arquivo.filename.endswith(('.xls', '.xlsx')):
+        flash("Formato inválido. Envie um arquivo .xlsx ou .xls", "erro")
+        return redirect(url_for('hub'))
+        
+    sucesso, mensagem = atualizar_produtos_via_excel(arquivo)
+    if sucesso:
+        flash(mensagem, "sucesso")
+    else:
+        flash(mensagem, "erro")
+        
+    return redirect(url_for('hub'))
+
+# 2. Rota invisível que o formulário chama enquanto você digita
+@app.route("/api/produto/<codigo>")
+def buscar_produto(codigo):
+    # Procura no dicionário. Se não achar, retorna "Não encontrado"
+    nome = produtos_cadastrados.get(codigo, "Não encontrado")
+    return jsonify({"nome": nome})
 
 @app.route("/gerar-relatorio", methods=["POST"])
 def gerar():

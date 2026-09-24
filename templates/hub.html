@@ -15,30 +15,42 @@
         </div>
 
         <div class="form-container">
+            
+            <!-- Mostra mensagens de sucesso ou erro do Excel -->
+            {% with messages = get_flashed_messages(with_categories=true) %}
+              {% if messages %}
+                <div style="margin-bottom: 20px;">
+                {% for category, message in messages %}
+                  <div class="{{ category }}" style="display: block; text-align: center; font-weight: bold; font-size: 14px; padding: 12px; margin-bottom: 10px;">{{ message }}</div>
+                {% endfor %}
+                </div>
+              {% endif %}
+            {% endwith %}
+
             <div class="hub-grid">
                 
                 <!-- Botão 1: Relatório de Avaria -->
                 <a href="/relatorio-avaria" class="hub-card">
                     <div class="hub-icon">📄</div>
                     <h3>Relatório de Avaria</h3>
-                    <p>Gerar PDF de avaria ou falta Doce Mineiro.</p>
+                    <p>Gerar PDF de avaria ou falta.</p>
                 </a>
 
-                <!-- Botão 2: Exemplo de um futuro relatório -->
-                <div class="hub-card disabled">
-                    <div class="hub-icon">📊</div>
-                    <h3>Controle de Frota</h3>
-                    <p>Em desenvolvimento...</p>
-                </div>
-                
-                <!-- Botão 3: Outro exemplo -->
-                <div class="hub-card disabled">
-                    <div class="hub-icon">📦</div>
-                    <h3>Estoque</h3>
-                    <p>Em desenvolvimento...</p>
+                <!-- Botão 2: UPLOAD DE EXCEL -->
+                <div class="hub-card" style="border: 2px dashed #007bff; cursor: default;">
+                    <form action="/upload-produtos" method="POST" enctype="multipart/form-data">
+                        <div class="hub-icon" style="margin-bottom: 5px;">📈</div>
+                        <h3 style="color: #007bff;">Atualizar Produtos</h3>
+                        <p style="margin-bottom: 15px;">Envie Excel: 1ª Coluna (Cód), 2ª Coluna (Nome)</p>
+                        
+                        <input type="file" name="arquivo_excel" accept=".xlsx, .xls" required style="font-size: 12px; padding: 5px; margin-bottom: 10px;">
+                        
+                        <button type="submit" class="btn-adicionar" style="background: #007bff;">Carregar para o Sistema</button>
+                    </form>
                 </div>
 
             </div>
+        </div>
         </div>
     </div>
 </body>

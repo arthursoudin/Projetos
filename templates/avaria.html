@@ -49,7 +49,10 @@
                                 </div>
                                 <div class="form-group">
                                     <label>Código do produto:</label>
-                                    <input type="text" name="codigo[]" required>
+                                    <!-- Adicionamos o evento oninput -->
+                                    <input type="text" name="codigo[]" required oninput="buscarNome(this)">
+                                    <!-- Adicionamos esse span vazio que vai receber o nome na tela -->
+                                    <span class="produto-nome-live" style="font-size: 12px; font-weight: 600; margin-top: 5px; height: 14px; display: block;"></span>
                                 </div>
                                 <div class="form-group">
                                     <label>Motivo:</label>
@@ -132,6 +135,32 @@
             } else {
                 alert("O relatório tem de ter pelo menos um produto.");
             }
+        }
+        // Função do Sistema V2.5 - Busca nome ao vivo!
+        function buscarNome(inputElem) {
+            const codigo = inputElem.value;
+            const spanNome = inputElem.nextElementSibling; // Pega o <span> logo abaixo
+            
+            if (codigo.trim() === "") {
+                spanNome.innerText = "";
+                return;
+            }
+
+            // Vai até a rota /api/produto do Python em segundo plano
+            fetch(`/api/produto/${codigo}`)
+                .then(response => response.json())
+                .then(data => {
+                    if (data.nome !== "Não encontrado") {
+                        spanNome.innerText = "✓ " + data.nome;
+                        spanNome.style.color = "#286628"; // Verde sucesso
+                    } else {
+                        spanNome.innerText = "✗ Código não existe na planilha";
+                        spanNome.style.color = "#a52222"; // Vermelho erro
+                    }
+                })
+                .catch(erro => {
+                    spanNome.innerText = "Erro ao buscar";
+                });
         }
     </script>
 </body>
