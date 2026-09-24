@@ -1,0 +1,134 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+    <meta charset="UTF-8">
+    <title>Relatório de Avaria</title>
+    <link rel="stylesheet" href="{{ url_for('static', filename='style.css') }}">
+</head>
+<body>
+    <div class="container">
+        <div class="header">
+            <h1>Relatório de Avaria</h1>
+            <p>Preencha os dados do redespacho e os produtos avariados.</p>
+        </div>
+
+        <div class="form-container">
+            <form action="/gerar-relatorio" method="POST">
+                <div class="section">
+                    <h2 class="section-title">Dados Gerais</h2>
+                    <div class="form-grid">
+                        <div class="form-group">
+                            <label>Redespacho:</label>
+                            <input type="text" name="redespacho" required>
+                        </div>
+                        <div class="form-group">
+                            <label>Ordem de carga:</label>
+                            <input type="text" name="ordem" required>
+                        </div>
+                        <div class="form-group">
+                            <label>Operador:</label>
+                            <input type="text" name="operador" required>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="section">
+                    <h2 class="section-title">Produtos</h2>
+                    <div id="produtos-container" class="produtos-container">
+                        
+                        <!-- Bloco do Produto -->
+                        <div class="produto-form produto-item">
+                            <div class="form-grid">
+                                <div class="form-group">
+                                    <label>Quantidade:</label>
+                                    <input type="number" name="quantidade[]" required>
+                                </div>
+                                <div class="form-group">
+                                    <label>Código do produto:</label>
+                                    <input type="text" name="codigo[]" required>
+                                </div>
+                                <div class="form-group">
+                                    <label>Motivo:</label>
+                                    <input type="text" name="motivo[]" required>
+                                </div>
+                                <div class="form-group">
+                                    <label>Nota Fiscal:</label>
+                                    <input type="text" name="nota_fiscal[]" required>
+                                </div>
+                            </div>
+                            
+                            <!-- Botão de remover -->
+                            <div style="text-align: right; margin-top: 12px;">
+                                <button type="button" class="btn-remover" onclick="removerProduto(this)" style="padding: 5px 10px;">
+                                    Remover produto
+                                </button>
+                            </div>
+                            
+                            <hr style="margin: 15px 0; border: 0; border-top: 1px solid #ddd;">
+                        </div>
+
+                    </div>
+                    
+                    <button type="button" class="btn-adicionar" onclick="adicionarProduto()" style="margin-top: 10px; background: #555;">
+                        + Adicionar outro produto
+                    </button>
+                </div>
+
+                <div class="section">
+                    <h2 class="section-title">Dados de Transporte</h2>
+                    <div class="form-grid">
+                        <div class="form-group">
+                            <label>Motorista:</label>
+                            <input type="text" name="motorista" required>
+                        </div>
+                        <div class="form-group">
+                            <label>Transportadora:</label>
+                            <input type="text" name="transportadora" required>
+                        </div>
+                        <div class="form-group">
+                            <label>Placa:</label>
+                            <input type="text" name="placa" required>
+                        </div>
+                        <div class="form-group">
+                            <label>CPF:</label>
+                            <input type="text" name="cpf" required>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="actions">
+                    <button type="submit" class="btn-gerar">Gerar PDF</button>
+                </div>
+            </form>
+        </div>
+    </div>
+
+    <!-- Script para adicionar e remover múltiplos produtos -->
+    <script>
+        function adicionarProduto() {
+            const container = document.getElementById('produtos-container');
+            const linhas = container.getElementsByClassName('produto-item');
+            const novaLinha = linhas[0].cloneNode(true);
+            
+            // Limpa os valores dos inputs clonados
+            const inputs = novaLinha.querySelectorAll('input');
+            inputs.forEach(input => input.value = '');
+            
+            container.appendChild(novaLinha);
+        }
+
+        function removerProduto(botao) {
+            const container = document.getElementById('produtos-container');
+            const linhas = container.getElementsByClassName('produto-item');
+            
+            // Só permite apagar se houver mais do que 1 produto na lista
+            if (linhas.length > 1) {
+                const linhaParaRemover = botao.closest('.produto-item');
+                linhaParaRemover.remove();
+            } else {
+                alert("O relatório tem de ter pelo menos um produto.");
+            }
+        }
+    </script>
+</body>
+</html>
