@@ -54,7 +54,6 @@ def buscar_produto(codigo):
 @app.route("/gerar-relatorio", methods=["POST"])
 def gerar():
     ordem = request.form["ordem"]
-    redespacho = request.form["redespacho"]
     operador = request.form["operador"]
     motorista = request.form["motorista"]
     transportadora = request.form["transportadora"]
@@ -67,7 +66,7 @@ def gerar():
     notas_fiscais = request.form.getlist("nota_fiscal[]")
 
     produtos = [
-        ["QUANTIDADE", "PRODUTO", "MOTIVO", "NOTA FISCAL"]
+        ["CODIGO","QUANTIDADE", "PRODUTO", "MOTIVO", "NOTA FISCAL"]
     ]
 
     for i in range(len(codigos)):
@@ -78,10 +77,10 @@ def gerar():
         else:
             nome_produto = f"Cód. não encontrado ({cod})"
             
-        produtos.append([quantidades[i], nome_produto, motivos[i], notas_fiscais[i]])
+        
+        produtos.append([cod, quantidades[i], nome_produto, motivos[i], notas_fiscais[i]])
 
     arquivo = gerar_relatorio(
-        redespacho=redespacho,
         ordem_carga=ordem,
         data=date.today(),
         operador=operador,

@@ -11,7 +11,7 @@
         <div class="header">
             <div>
                 <h1>Relatório de Avaria</h1>
-                <p>Preencha os dados do redespacho e os produtos avariados.</p>
+                <p>Preencha os dados do Operador e os produtos avariados.</p>
             </div>
             <a href="/" class="btn-voltar">← Voltar ao Hub</a>
         </div>
@@ -22,16 +22,12 @@
                     <h2 class="section-title">Dados Gerais</h2>
                     <div class="form-grid">
                         <div class="form-group">
-                            <label>Redespacho:</label>
-                            <input type="text" name="redespacho" required>
-                        </div>
-                        <div class="form-group">
                             <label>Ordem de carga:</label>
                             <input type="text" name="ordem" required>
                         </div>
                         <div class="form-group">
                             <label>Operador:</label>
-                            <input type="text" name="operador" required>
+                            <input type="text" name="operador" value="MSSO Transporte e Logística" required>
                         </div>
                     </div>
                 </div>
@@ -56,7 +52,10 @@
                                 </div>
                                 <div class="form-group">
                                     <label>Motivo:</label>
-                                    <input type="text" name="motivo[]" required>
+                                    <select name="motivo[]" required>
+                                        <option value="AVARIA">AVARIA</option>
+                                        <option value="FALTA">FALTA</option>
+                                        </select>
                                 </div>
                                 <div class="form-group">
                                     <label>Nota Fiscal:</label>
